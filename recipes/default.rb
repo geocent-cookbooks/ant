@@ -19,23 +19,50 @@
 
 include_recipe "java"
 
-case node.platform
-when "centos","redhat","fedora"
-  include_recipe "jpackage"
-end
 
-ant_pkgs = value_for_platform(
-  ["debian","ubuntu",] => {
-    "default" => ["ant","ant-contrib","ivy"]
-  },
-  ["centos","redhat","fedora" ] => {
-    "default" => ["ant","ant-contrib","ivy"]
-  },
-  "default" => ["ant","ant-contrib","ivy"]
-)
+if platform?("centos","redhat","fedora","scientific","amazon","debian","ubuntu")
 
-ant_pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
+    case node.platform
+    when "centos","redhat","fedora"
+      include_recipe "jpackage"
+    end
+
+    ant_pkgs = value_for_platform(
+      ["debian","ubuntu",] => {
+        "default" => ["ant","ant-contrib","ivy"]
+      },
+      ["centos","redhat","fedora" ] => {
+        "default" => ["ant","ant-contrib","ivy"]
+      },
+      "default" => ["ant","ant-contrib","ivy"]
+    )
+
+    ant_pkgs.each do |pkg|
+      package pkg do
+        action :install
+      end
+    end
+
+elsif platform?("windows")
+    
+    ant_home = "#{node['ant']['apache_root']}\\#{node['ant']['art_name']}"
+    ant_path = "#{ant_home}\\bin"
+
+    log "Unzipping ant"
+
+    windows_zipfile "Unzip ant binaries" do
+        path node['ant']['apache_root']
+        source node['ant']['url']
+        action :unzip
+        not_if {::File.exists?(ant_path)}
+    end
+
+    env "ANT_HOME" do
+        value ant_home
+    end
+
+    windows_path ant_path do
+        action :add
+    end
+
 end

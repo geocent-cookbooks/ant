@@ -45,7 +45,7 @@ if platform?("centos","redhat","fedora","scientific","amazon","debian","ubuntu")
 
 elsif platform?("windows")
     
-    ant_home = "#{node['ant']['apache_root']}\\#{node['ant']['art_name']}"
+    ant_home = "#{node['ant']['apache_root']}\\#{node['ant']['ant_name']}"
     ant_path = "#{ant_home}\\bin"
 
     log "Unzipping ant"

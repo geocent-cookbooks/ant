@@ -1,0 +1,5 @@
+cookbook 'ant', :path => '/Users/tylersanders/Documents/dev/active/exosphere-chef-repo/cookbooks/ant'
+cookbook 'java', :locked_version => '1.10.0'
+cookbook 'windows', :locked_version => '1.8.6'
+cookbook 'chef_handler', :locked_version => '1.1.4'
+cookbook 'jpackage', :locked_version => '1.0.0'
